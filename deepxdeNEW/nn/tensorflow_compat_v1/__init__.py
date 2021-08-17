@@ -10,6 +10,8 @@ from .msffn import MsFFN, STMsFFN
 from .nn import NN
 from .resnet import ResNet
 
+from .mfnn_L2H import MfNN_L2H   ##### Add for the hierarchical multi-fidelity NN
+
 __all__ = [
     "BiONet",
     "DeepONet",
@@ -23,4 +25,5 @@ __all__ = [
     "NN",
     "STMsFFN",
     "ResNet",
+    "MfNN_L2H"
 ]
