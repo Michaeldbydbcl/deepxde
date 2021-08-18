@@ -2,14 +2,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-### The relative path is changed in the new version of deepXDE
-# from . import activations      
-# from . import initializers
-# from . import regularizers
-# from .map import Map
-# from .. import config
-# from ..backend import tf
-# from ..utils import timing
+"""
+    This file aimes to build a multi-fidelity NN with TWO low fidelity and ONE high fidelity datasets
+"""
 
 from .nn import NN
 from .. import activations

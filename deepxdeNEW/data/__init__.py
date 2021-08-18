@@ -17,6 +17,9 @@ from .triple import Triple, TripleCartesianProd
 from .mf_L2H import MfFunc_L2H    ##### Add multi-fidelity function from expression interface 
 from .mf_L2H import MfData_L2H         ##### Add multi-fidelity function from datasets interface 
 
+from .mf_LH2 import MfFunc_LH2    ##### Add multi-fidelity function from expression interface 
+from .mf_LH2 import MfData_LH2         ##### Add multi-fidelity function from datasets interface 
+
 __all__ = [
     "Constraint",
     "DataSet",
@@ -34,4 +37,6 @@ __all__ = [
     "TripleCartesianProd",
     "MfFunc_L2H",
     "MfData_L2H",
+    "MfFunc_LH2",
+    "MfData_LH2",
 ]
