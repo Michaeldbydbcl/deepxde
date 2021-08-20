@@ -3,7 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 """
-    This file aimes to build a multi-fidelity NN with ONE low fidelity and TWO high fidelity datasets
+    This file aimes to build a multi-fidelity NN with ONE low fidelity, middle fidelity and high fidelity datasets
 """
 
 from .nn import NN
@@ -14,7 +14,7 @@ from ... import config
 from ...backend import tf
 from ...utils import timing
 
-class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of deepXDE
+class MfNN_LMH(NN):             ### Changed "Map" to "NN" for the new verison of deepXDE
     """Multifidelity neural networks.
     """
 
@@ -22,9 +22,8 @@ class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of
         self,
         layer_size_low_fidelity,
 
-        # layer_size_high_fidelity,
-        layer_size_high_one_fidelity,     ##### Add two HIGH fidelity datasets
-        layer_size_high_two_fidelity,     ##### Add two HIGH fidelity datasets
+        layer_size_mid_fidelity,      ##### Add MIDDLE fidelity datasets
+        layer_size_high_fidelity,     ##### Add HIGH fidelity datasets
 
         activation,
         kernel_initializer,
@@ -32,16 +31,14 @@ class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of
         residue=False,
         trainable_low_fidelity=True,
 
-        # trainable_high_fidelity=True,
-        trainable_high_one_fidelity=True,     ##### Add two HIGH fidelity datasets
-        trainable_high_two_fidelity=True,     ##### Add two HIGH fidelity datasets
+        trainable_mid_fidelity=True,      ##### Add MIDDLE fidelity datasets
+        trainable_high_fidelity=True,     ##### Add HIGH fidelity datasets
     ):
-        super(MfNN_LH2, self).__init__()
+        super(MfNN_LMH, self).__init__()
         self.layer_size_lo = layer_size_low_fidelity
 
-        # self.layer_size_hi = layer_size_high_fidelity
-        self.layer_size_hi_one = layer_size_high_one_fidelity     ##### Add two HIGH fidelity datasets
-        self.layer_size_hi_two = layer_size_high_two_fidelity     ##### Add two HIGH fidelity datasets
+        self.layer_size_mi = layer_size_mid_fidelity     ##### Add MIDDLE fidelity datasets
+        self.layer_size_hi = layer_size_high_fidelity     ##### Add HIGH fidelity datasets
 
         self.activation = activations.get(activation)
         self.kernel_initializer = initializers.get(kernel_initializer)
@@ -49,9 +46,8 @@ class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of
         self.residue = residue
         self.trainable_lo = trainable_low_fidelity
 
-        # self.trainable_hi = trainable_high_fidelity
-        self.trainable_hi_one = trainable_high_one_fidelity     ##### Add two HIGH fidelity datasets
-        self.trainable_hi_two = trainable_high_two_fidelity     ##### Add two HIGH fidelity datasets
+        self.trainable_mi = trainable_mid_fidelity      ##### Add MIDDLE fidelity datasets
+        self.trainable_hi = trainable_high_fidelity     ##### Add HIGH fidelity datasets
 
 
     @property
@@ -60,11 +56,11 @@ class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of
 
     @property
     def outputs(self):
-        return [self.y_lo, self.y_hi_one, self.y_hi_two]
+        return [self.y_lo, self.y_mi, self.y_hi]
 
     @property
     def targets(self):
-        return [self.target_lo, self.target_hi_one, self.target_hi_two]
+        return [self.target_lo, self.target_mi, self.target_hi]
 
     @timing
     def build(self):
@@ -72,7 +68,7 @@ class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of
         self.X = tf.placeholder(config.real(tf), [None, self.layer_size_lo[0]])  
 
         #####--------------------------------------------------------------------
-        ##### Build MfNN with 2 low fidelity layers and 1 high fidelity layers.
+        ##### Build MfNN with 1 low fidelity, 1 middle fidelity and 1 high fidelity layers.
         #####--------------------------------------------------------------------
 
         # Low fidelity
@@ -93,86 +89,89 @@ class MfNN_LH2(NN):             ### Changed "Map" to "NN" for the new verison of
         )
 
         #------------------------------------------------- 
-        ##### Build two High fidelit NNs
+        ##### Build Middle and High fidelitt NNs
         #------------------------------------------------- 
 
-        ### Build the high_one NN
-        X_hi = tf.concat([self.X, self.y_lo], 1)
+        ### Build the Middle NN
+        X_mi = tf.concat([self.X, self.y_lo], 1)
         # Linear
-        y_hi_one_l = self.dense(X_hi, self.layer_size_hi_one[-1], trainable=self.trainable_hi_one)
+        y_mi_l = self.dense(X_mi, self.layer_size_mi[-1], trainable=self.trainable_mi)
         # Nonlinear
-        y = X_hi
-        for i in range(len(self.layer_size_hi_one) - 1):
+        y = X_mi
+        for i in range(len(self.layer_size_mi) - 1):
             y = self.dense(
                 y,
-                self.layer_size_hi_one[i],
+                self.layer_size_mi[i],
                 activation=self.activation,
                 regularizer=self.regularizer,
-                trainable=self.trainable_hi_one,
+                trainable=self.trainable_mi,
             )
-        y_hi_one_nl = self.dense(
+        y_mi_nl = self.dense(
             y,
-            self.layer_size_hi_one[-1],
+            self.layer_size_mi[-1],
             use_bias=False,
             regularizer=self.regularizer,
-            trainable=self.trainable_hi_one,
+            trainable=self.trainable_mi,
         )
         # Linear + nonlinear
         if not self.residue:
-            alpha = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi_one)
+            alpha = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_mi)
             alpha = activations.get("tanh")(alpha)
-            self.y_hi_one = y_hi_one_l + alpha * y_hi_one_nl
+            self.y_mi = y_mi_l + alpha * y_mi_nl
         else:
-            alpha1 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi_one)
+            alpha1 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_mi)
             alpha1 = activations.get("tanh")(alpha1)
-            alpha2 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi_one)
+            alpha2 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_mi)
             alpha2 = activations.get("tanh")(alpha2)
             alpha3 = tf.Variable(1, dtype=config.real(tf), trainable=True)
            
-            self.y_hi_one = alpha3 * self.y_lo + 0.1 * (alpha1 * y_hi_one_l + alpha2 * y_hi_one_nl)
+            self.y_mi = alpha3 * self.y_lo + + 0.1 * (alpha1 * y_mi_l + alpha2 * y_mi_nl)
 
 
-        ### Build the high_two NN
-        X_hi = tf.concat([self.X, self.y_lo], 1)
+        ### Build the high NN 
+        X_hi = tf.concat([self.X, self.y_mi], 1)      ##### !!! How to differentiate from LH2 NN? Feed y_mi to high NN?
         # Linear
-        y_hi_two_l = self.dense(X_hi, self.layer_size_hi_two[-1], trainable=self.trainable_hi_two)
+        y_hi_l = self.dense(X_hi, self.layer_size_hi[-1], trainable=self.trainable_hi)
         # Nonlinear
         y = X_hi
-        for i in range(len(self.layer_size_hi_two) - 1):
+        for i in range(len(self.layer_size_hi) - 1):
             y = self.dense(
                 y,
-                self.layer_size_hi_two[i],
+                self.layer_size_hi[i],
                 activation=self.activation,
                 regularizer=self.regularizer,
-                trainable=self.trainable_hi_two,
+                trainable=self.trainable_hi,
             )
-        y_hi_two_nl = self.dense(
+        y_hi_nl = self.dense(
             y,
-            self.layer_size_hi_two[-1],
+            self.layer_size_hi[-1],
             use_bias=False,
             regularizer=self.regularizer,
-            trainable=self.trainable_hi_two,
+            trainable=self.trainable_hi,
         )
         # Linear + nonlinear
         if not self.residue:
-            alpha = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi_two)
+            alpha = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi)
             alpha = activations.get("tanh")(alpha)
-            self.y_hi_two = y_hi_two_l + alpha * y_hi_two_nl
+            self.y_hi = y_hi_l + alpha * y_hi_nl
         else:
-            alpha4 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi_two)
+            alpha4 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi)
             alpha4 = activations.get("tanh")(alpha1)
-            alpha5 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi_two)
+            alpha5 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi)
             alpha5 = activations.get("tanh")(alpha2)
+
             alpha6 = tf.Variable(1, dtype=config.real(tf), trainable=True)
-           
-            self.y_hi_two = alpha6 * self.y_lo + + 0.1 * (alpha4 * y_hi_two_l + alpha5 * y_hi_two_nl)
+            alpha7 = tf.Variable(1, dtype=config.real(tf), trainable=True)
+          
+            self.y_hi = alpha6 * self.y_mi + + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
+            # self.y_hi = alpha7 * self.y_lo + alpha6* self.y_mi + + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
 
 
 
         self.target_lo = tf.placeholder(config.real(tf), [None, self.layer_size_lo[-1]]) 
 
-        self.target_hi_one = tf.placeholder(config.real(tf), [None, self.layer_size_hi_one[-1]])     ##### Add two HIGH fidelity datasets
-        self.target_hi_two = tf.placeholder(config.real(tf), [None, self.layer_size_hi_two[-1]])     ##### Add two HIGH fidelity datasets
+        self.target_mi = tf.placeholder(config.real(tf), [None, self.layer_size_mi[-1]])     ##### Add Middle fidelity datasets
+        self.target_hi = tf.placeholder(config.real(tf), [None, self.layer_size_hi[-1]])     ##### Add HIGH fidelity datasets
 
         self.built = True
 

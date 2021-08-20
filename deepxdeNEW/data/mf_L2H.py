@@ -178,10 +178,10 @@ class MfData_L2H(Data):
         self._standardize()
 
     def losses(self, targets, outputs, loss, model):
-        # n1 = tf.cond(model.net.training, lambda: len(self.X_lo_one_train), lambda: 0)
-        # n2 = tf.cond(model.net.training, lambda: len(self.X_lo_two_train), lambda: 0)
-        n1 = len(self.X_lo_one_train)
-        n2 = len(self.X_lo_two_train)
+        n1 = tf.cond(model.net.training, lambda: len(self.X_lo_one_train), lambda: 0)
+        n2 = tf.cond(model.net.training, lambda: len(self.X_lo_two_train), lambda: 0)
+        # n1 = len(self.X_lo_one_train)
+        # n2 = len(self.X_lo_two_train)
 
         print("########################################")
         print("n1 is: ", n1)

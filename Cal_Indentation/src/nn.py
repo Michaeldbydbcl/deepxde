@@ -167,7 +167,9 @@ def validation_mf(yname, train_size):
             X_hi_test=datahigh.X[test_index],
             y_hi_test=datahigh.y[test_index],
         )
-        mape.append(dde.apply(mfnn, (data,))[0])
+        # mape.append(dde.apply(mfnn, (data,))[0])
+        mape.append(dde.utils.apply(mfnn, (data,))[0])      ##### Changed in New version
+
         # mape.append(dde.apply(mfgp, (data,)))
 
     print(mape)
@@ -374,7 +376,7 @@ def main():
     # return
 
     # file = open("C:\\Users\\wshi\\Documents\\GitHub\\deep-learning-for-indentation\\src\\MAPE.txt", "w")
-    for train_size in range(1, 13):
+    for train_size in range(1, 2):
         # validation_model("E*", train_size)
         # validation_FEM("sigma_y", [50, 60, 70, 80], train_size)
 

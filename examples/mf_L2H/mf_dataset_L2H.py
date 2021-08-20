@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-sys.path.append('../')
+sys.path.append('../../')
 
 import deepxdeNEW as dde
 

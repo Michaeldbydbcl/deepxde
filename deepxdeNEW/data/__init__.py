@@ -14,11 +14,14 @@ from .pde import PDE
 from .pde import TimePDE
 from .triple import Triple, TripleCartesianProd
 
-from .mf_L2H import MfFunc_L2H    ##### Add multi-fidelity function from expression interface 
+from .mf_L2H import MfFunc_L2H         ##### Add multi-fidelity function from expression interface 
 from .mf_L2H import MfData_L2H         ##### Add multi-fidelity function from datasets interface 
 
-from .mf_LH2 import MfFunc_LH2    ##### Add multi-fidelity function from expression interface 
+from .mf_LH2 import MfFunc_LH2         ##### Add multi-fidelity function from expression interface 
 from .mf_LH2 import MfData_LH2         ##### Add multi-fidelity function from datasets interface 
+
+from .mf_LMH import MfFunc_LMH         ##### Add multi-fidelity function from expression interface 
+from .mf_LMH import MfData_LMH         ##### Add multi-fidelity function from datasets interface 
 
 __all__ = [
     "Constraint",
@@ -39,4 +42,6 @@ __all__ = [
     "MfData_L2H",
     "MfFunc_LH2",
     "MfData_LH2",
+    "MfFunc_LMH",
+    "MfData_LMH",
 ]

@@ -26,10 +26,10 @@ def main():
     # def func_lo_one(x):
     #     return 3*x
 
-    def func_lo_one(x):
+    def func_lo(x):
         return 3 * x
 
-    def func_lo_two(x):
+    def func_mi(x):
         return np.sin(2 * np.pi * x)
 
     def func_hi(x):
@@ -37,7 +37,7 @@ def main():
 
     geom = dde.geometry.Interval(0, 1)
     num_test = 1000
-    data = dde.data.MfFunc_L2H(geom, func_lo_one, func_lo_two, func_hi, 100, 100, 100, num_test)
+    data = dde.data.MfFunc_LMH(geom, func_lo, func_mi, func_hi, 100, 100, 100, num_test)
 
     activation = "tanh"
     initializer = "Glorot uniform"
@@ -46,7 +46,7 @@ def main():
     # The mfnn_L2H net contains 2 low fidelity and 1 high fidelity datasets
     # 
 
-    net = dde.maps.MfNN_L2H(
+    net = dde.maps.MfNN_LMH(
         [1] + [20] * 4 + [1],   ### Two fidelity layers
         [1] + [20] * 4 + [1],   ### Two fidelity layers
         [10] * 2 + [1],
