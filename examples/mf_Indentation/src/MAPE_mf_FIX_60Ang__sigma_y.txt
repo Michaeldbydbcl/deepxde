@@ -1,0 +1,80 @@
+Using TensorFlow 2 backend.
+
+              Case          n     E (GPa)  ...      Wp/Wt    E* (GPa)      sy/E*
+count    95.000000  95.000000   95.000000  ...  18.000000   95.000000  95.000000
+mean    274.052632   0.208946  109.209358  ...   0.824905  109.209358   0.013545
+std     407.776179   0.177157   66.358723  ...   0.095302   66.358723   0.009893
+min       1.000000   0.000000   10.000000  ...   0.624196   10.000000   0.001429
+25%      37.500000   0.084688   50.000000  ...   0.780207   50.000000   0.005556
+50%      67.000000   0.173476  100.810000  ...   0.844428  100.810000   0.012000
+75%      90.500000   0.300000  170.000000  ...   0.866001  170.000000   0.017647
+max    1023.000000   0.500000  210.000000  ...   0.968203  210.000000   0.040000
+
+[8 rows x 9 columns]
+              Case          n     E (GPa)  ...     C (GPa)    dP/dh (N/m)      Wp/Wt
+count    14.000000  14.000000   14.000000  ...   14.000000      14.000000  14.000000
+mean    802.071429   0.141683  100.074499  ...   83.395179  127043.116339   0.757835
+std     412.214557   0.087468   70.142848  ...   75.629024   96045.592932   0.157921
+min       6.000000   0.000000   10.000000  ...    5.391397   13276.677320   0.452806
+25%    1001.250000   0.077031   37.524500  ...   30.061256   42136.388600   0.675230
+50%    1007.000000   0.150378   79.808000  ...   71.391348   98478.987680   0.784977
+75%    1012.750000   0.195295  155.424000  ...   97.621153  202124.474350   0.870086
+max    1018.000000   0.300000  210.000000  ...  239.235773  326727.270700   0.971982
+
+[8 rows x 7 columns]
+
+Cross-validation iteration: 1
+Using TensorFlow 2 backend.
+
+Compiling model...
+Building multifidelity neural network...
+'build' took 0.453785 s
+
+'compile' took 2.194132 s
+
+Initializing variables...
+Training model...
+
+Step      Train loss                        Test loss                         Test metric                                 
+0         [nan, 5.09e+01, 2.89e+00]         [0.00e+00, 5.73e+02, 2.89e+00]    [5.73e+02, 5.73e+02, 8.42e+02, 8.42e+02]    
+1000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+2000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+3000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+4000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+5000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+6000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+7000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+8000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+9000      [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+10000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+11000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+12000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+13000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+14000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+15000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+16000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+17000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+18000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+19000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+20000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+21000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+22000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+23000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+24000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+25000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+26000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+27000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+28000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+29000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+30000     [nan, nan, nan]                   [0.00e+00, nan, nan]              [nan, nan, nan, nan]                        
+
+Best model at step 0:
+  train loss: inf
+  test loss: inf
+  test metric: 
+
+'train' took 51.372638 s
+
+Saving loss history to loss.dat ...
+Saving training data to train.dat ...
+Saving test data to test.dat ...
