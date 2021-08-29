@@ -171,7 +171,7 @@ class MfNN_L2H(NN):             ### Changed "Map" to "NN" for the new verison of
 
             alpha3 = tf.Variable(1, dtype=config.real(tf), trainable=True)
             alpha4 = tf.Variable(1, dtype=config.real(tf), trainable=True)
-           
+           #####    
             self.y_hi = alpha3 * self.y_lo_one + alpha4 * self.y_lo_two + 0.1 * (alpha1 * y_hi_l + alpha2 * y_hi_nl)
 
         self.target_lo_one = tf.placeholder(config.real(tf), [None, self.layer_size_lo_one[-1]])   ### Two low fidelity layers

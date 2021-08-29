@@ -37,7 +37,7 @@ def main():
 
     geom = dde.geometry.Interval(0, 1)
     num_test = 1000
-    data = dde.data.MfFunc_L2H(geom, func_lo_one, func_lo_two, func_hi, 100, 100, 100, num_test)
+    data = dde.data.MfFunc_L2H(geom, func_lo_one, func_lo_two, func_hi, 400, 400, 100, num_test)
 
     activation = "tanh"
     initializer = "Glorot uniform"
@@ -47,9 +47,9 @@ def main():
     # 
 
     net = dde.maps.MfNN_L2H(
-        [1] + [20] * 4 + [1],   ### Two fidelity layers
-        [1] + [20] * 4 + [1],   ### Two fidelity layers
-        [10] * 2 + [1],
+        [1] + [4] * 4 + [1],   ### Two fidelity layers
+        [1] + [4] * 4 + [1],   ### Two fidelity layers
+        [2] * 2 + [1],
         activation,
         initializer,
         regularization=regularization,

@@ -144,13 +144,14 @@ def mfnn_L2H(data):
     )
 
 
-def validation_mf(yname, train_size):
+def validation_mf(yname, train_size, Run_Number):
     datalow_one = FEMData(yname, [70])
-    datalow_two = FEMData(yname, [70])
+    datalow_two = BerkovichData(yname)
 
     # datalow = ModelData(yname, 10000, "forward_n")
-    datahigh = BerkovichData(yname)
+    # datahigh = BerkovichData(yname)
     # datahigh = FEMData(yname, [70])
+    datahigh = ExpData("../data/B3067.csv", yname)
 
     kf = ShuffleSplit(
         n_splits=10, test_size=len(datahigh.X) - train_size, random_state=0
@@ -178,6 +179,11 @@ def validation_mf(yname, train_size):
 
         # mape.append(dde.apply(mfgp, (data,)))
 
+    ### Open a file to store MAPE values
+    with open(yname+"_"+Run_Number+".txt", "a") as myfile:
+        L = [yname, ",", str(train_size), ",", str(np.mean(mape)), ",", str(np.std(mape)), "\n"]
+        myfile.writelines(L)
+        
     print(mape)
     print(yname, train_size, np.mean(mape), np.std(mape))
 
@@ -382,12 +388,12 @@ def main():
     # return
 
     # file = open("C:\\Users\\wshi\\Documents\\GitHub\\deep-learning-for-indentation\\src\\MAPE.txt", "w")
-    for train_size in range(1, 2):
+    for train_size in range(1, 12):
         # validation_model("E*", train_size)
         # validation_FEM("sigma_y", [50, 60, 70, 80], train_size)
 
         # file.write(validation_mf("E*", train_size))
-        validation_mf("sigma_y", train_size)
+        validation_mf("sigma_y", train_size, "L2H_run1")
         # validation_exp_cross2("E*", train_size)
 
         print("=======================================================")

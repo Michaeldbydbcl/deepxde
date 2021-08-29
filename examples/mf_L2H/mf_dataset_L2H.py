@@ -62,13 +62,13 @@ def main():
         col_y=(1,),
     )
 
-    activation = "tanh"
+    activation = "tanh"                            ##### From line 65 yo line 79, need to adjust parameters. 
     initializer = "Glorot uniform"
     regularization = ["l2", 0.01]
     net = dde.maps.MfNN_L2H(
-        [1] + [20] * 4 + [1],
-        [1] + [20] * 4 + [1],
-        [10] * 2 + [1],
+        [1] + [10] * 4 + [1],
+        [1] + [10] * 4 + [1],
+        [4] * 2 + [1],
         activation,
         initializer,
         regularization=regularization,
