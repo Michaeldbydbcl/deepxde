@@ -19,38 +19,37 @@ def main():
     fname_hi_train = "dataset/mf_hi_train.dat"
     fname_hi_test = "dataset/mf_hi_test.dat"
 
-    ##### Plot the data loaded from the files
-    data_temp = np.loadtxt(fname_lo_one_train)
-    x_lo_one_train_temp = data_temp[:,0]
-    y_lo_one_train_temp = data_temp[:,1]
+    # ##### Plot the data loaded from the files
+    # data_temp = np.loadtxt(fname_lo_one_train)
+    # x_lo_one_train_temp = data_temp[:,0]
+    # y_lo_one_train_temp = data_temp[:,1]
 
-    plt.scatter(x_lo_one_train_temp, y_lo_one_train_temp)
-    plt.show()
+    # plt.scatter(x_lo_one_train_temp, y_lo_one_train_temp)
+    # plt.show()
 
-    data_temp = np.loadtxt(fname_lo_two_train)
-    x_lo_two_train_temp = data_temp[:,0]
-    y_lo_two_train_temp = data_temp[:,1]
+    # data_temp = np.loadtxt(fname_lo_two_train)
+    # x_lo_two_train_temp = data_temp[:,0]
+    # y_lo_two_train_temp = data_temp[:,1]
 
-    plt.scatter(x_lo_two_train_temp, y_lo_two_train_temp)
-    plt.show()
+    # plt.scatter(x_lo_two_train_temp, y_lo_two_train_temp)
+    # plt.show()
 
 
-    data_temp = np.loadtxt(fname_hi_train)
-    x_hi_train_temp = data_temp[:,0]
-    y_hi_train_temp = data_temp[:,1]
+    # data_temp = np.loadtxt(fname_hi_train)
+    # x_hi_train_temp = data_temp[:,0]
+    # y_hi_train_temp = data_temp[:,1]
 
-    plt.scatter(x_hi_train_temp, y_hi_train_temp)
-    plt.show()
+    # plt.scatter(x_hi_train_temp, y_hi_train_temp)
+    # plt.show()
 
-    data_temp = np.loadtxt(fname_hi_test)
-    x_hi_test_temp = data_temp[:,0]
-    y_hi_test_temp = data_temp[:,1]
+    # data_temp = np.loadtxt(fname_hi_test)
+    # x_hi_test_temp = data_temp[:,0]
+    # y_hi_test_temp = data_temp[:,1]
     
-    plt.scatter(x_hi_test_temp, y_hi_test_temp)
+    # plt.scatter(x_hi_test_temp, y_hi_test_temp)
 
-    plt.show()
-    
-   
+    # plt.show()
+       
 
 
     data = dde.data.MfData_L2H(
@@ -62,11 +61,17 @@ def main():
         col_y=(1,),
     )
 
-    activation = "tanh"                            ##### From line 65 yo line 79, need to adjust parameters. 
+#####  Need to adjust parameters. 
+    # activation = "tanh" 
+    # activation = "sigmoid"     # (Very bad results)
+    # activation = "relu"        # (connected lines) 
+    # activation = "selu"        # (connected lines) 
+    activation = "silu"
+
     initializer = "Glorot uniform"
     regularization = ["l2", 0.01]
     net = dde.maps.MfNN_L2H(
-        [1] + [10] * 4 + [1],
+        [1] + [100] * 4 + [1],
         [1] + [10] * 4 + [1],
         [4] * 2 + [1],
         activation,

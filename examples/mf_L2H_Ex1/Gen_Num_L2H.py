@@ -1,0 +1,36 @@
+'''
+    This file generate two set of low fidelity data and one set of high fidelity data.
+    Using a high fidelity function as test function.
+'''
+
+import numpy as np
+import pandas
+
+###-----------------------------------------------
+### Define function that write two columns of data
+
+def Write_Data(File_Name, Data_Number, Function):
+    f = open(File_Name, "w")
+    f.write("# x, y" + '\n')
+    
+    for x in range(0, Data_Number, 1):
+        f.write("{:.8f}".format(x/Data_Number) + "  " + "{:.8f}".format(Function(x/Data_Number)))
+        f.write('\n')
+    f.close()
+
+
+# Define functions with two levels fidelities, two low and one high 
+def func_lo_one(x):
+    return 3 * x
+                                          
+def func_lo_two(x):
+    return np.sin(2 * np.pi * x)          
+                                          
+def func_hi(x):                           
+    return 3 * x * np.sin(2 * np.pi * x)  
+
+
+Write_Data("dataset\mf_lo_one_train.dat", 200, func_lo_one)
+Write_Data("dataset\mf_lo_two_train.dat", 200, func_lo_two)
+Write_Data("dataset\mf_hi_train.dat", 10, func_hi)
+Write_Data("dataset\mf_hi_test.dat", 1000, func_hi)
