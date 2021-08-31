@@ -11,7 +11,6 @@ import pandas
 
 def Write_Data(File_Name, Data_Number, Function, Write_Type):
     f = open(File_Name, Write_Type)
-    f.write("# x, y" + '\n')
     
     for x in range(0, Data_Number, 1):
         f.write("{:.8f}".format(x/Data_Number) + "  " + "{:.8f}".format(Function(x/Data_Number)))
@@ -30,7 +29,7 @@ def func_hi(x):
     return 3 * x * np.sin(2 * np.pi * x)  
 
 
-Write_Data("dataset\mf_lo_one_train.dat", 200, func_lo_one, "w")
-Write_Data("dataset\mf_lo_two_train.dat", 200, func_lo_two, "w")
+Write_Data("dataset\mf_lo_train.dat", 200, func_lo_one, "w")
+Write_Data("dataset\mf_lo_train.dat", 200, func_lo_two, "a")
 Write_Data("dataset\mf_hi_train.dat", 10, func_hi, "w")
 Write_Data("dataset\mf_hi_test.dat", 1000, func_hi, "w")
