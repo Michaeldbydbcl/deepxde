@@ -66,14 +66,14 @@ def main():
     # activation = "sigmoid"     # (Very bad results)
     # activation = "relu"        # (connected lines) 
     # activation = "selu"        # (connected lines) 
-    activation = "silu"
+    activation = "tanh"
 
     initializer = "Glorot uniform"
-    regularization = ["l2", 0.01]
+    regularization = ["l2", 0.001]   # change to small value?
     net = dde.maps.MfNN_L2H(
-        [1] + [100] * 4 + [1],
-        [1] + [10] * 4 + [1],
-        [4] * 2 + [1],
+        [1] + [20] * 4 + [1],
+        [1] + [20] * 4 + [1],
+        [10] * 2 + [1],
         activation,
         initializer,
         regularization=regularization,

@@ -19,17 +19,18 @@ def Write_Data(File_Name, Data_Number, Function, Write_Type):
 
 
 # Define functions with two levels fidelities, two low and one high 
+
 def func_lo_one(x):
-    return 3 * x
+    return x**2
                                           
 def func_lo_two(x):
-    return np.sin(2 * np.pi * x)          
+    return np.sin(8*np.pi*x + np.pi/10)          
                                           
 def func_hi(x):                           
-    return 3 * x * np.sin(2 * np.pi * x)  
+    return x**2 + np.sin(8*np.pi*x + np.pi/10)**2
 
 
-Write_Data("dataset\mf_lo_train.dat", 200, func_lo_one, "w")
-Write_Data("dataset\mf_lo_train.dat", 200, func_lo_two, "a")
-Write_Data("dataset\mf_hi_train.dat", 10, func_hi, "w")
+# Write_Data("dataset\mf_lo_train.dat", 100, func_lo_one, "w")
+Write_Data("dataset\mf_lo_train.dat", 100, func_lo_two, "w")
+Write_Data("dataset\mf_hi_train.dat", 20, func_hi, "w")
 Write_Data("dataset\mf_hi_test.dat", 1000, func_hi, "w")

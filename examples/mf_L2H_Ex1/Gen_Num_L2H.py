@@ -13,7 +13,7 @@ def Write_Data(File_Name, Data_Number, Function, Write_Type):
     f = open(File_Name, Write_Type)
     f.write("# x, y" + '\n')
     
-    for x in range(0, Data_Number, 1):
+    for x in np.arange(0, Data_Number+1, 1):
         f.write("{:.8f}".format(x/Data_Number) + "  " + "{:.8f}".format(Function(x/Data_Number)))
         f.write('\n')
     f.close()

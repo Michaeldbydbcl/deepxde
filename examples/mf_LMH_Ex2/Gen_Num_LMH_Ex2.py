@@ -1,5 +1,5 @@
 '''
-    This file generate two set of low fidelity data and one set of high fidelity data.
+    This file generate low, middle and high fidelity datasets
     Using a high fidelity function as test function.
 '''
 
@@ -9,8 +9,9 @@ import pandas
 ###-----------------------------------------------
 ### Define function that write two columns of data
 
-def Write_Data(File_Name, Data_Number, Function, Write_Type):
-    f = open(File_Name, Write_Type)
+def Write_Data(File_Name, Data_Number, Function):
+    f = open(File_Name, "w")
+    f.write("# x, y" + '\n')
     
     for x in np.arange(0, Data_Number+1, 1):
         f.write("{:.8f}".format(x/Data_Number) + "  " + "{:.8f}".format(Function(x/Data_Number)))
@@ -19,17 +20,19 @@ def Write_Data(File_Name, Data_Number, Function, Write_Type):
 
 
 # Define functions with two levels fidelities, two low and one high 
-def func_lo_one(x):
-    return 3 * x
+# This function is a phase-shifted oscillation function
+
+def func_lo(x):
+    return x**2
                                           
-def func_lo_two(x):
-    return np.sin(2 * np.pi * x)          
+def func_mi(x):
+    return np.sin(8*np.pi*x + np.pi/10)          
                                           
 def func_hi(x):                           
-    return 3 * x * np.sin(2 * np.pi * x)  
+    return x**2 + np.sin(8*np.pi*x + np.pi/10)
 
 
-Write_Data("dataset\mf_lo_train.dat", 200, func_lo_one, "w")
-Write_Data("dataset\mf_lo_train.dat", 200, func_lo_two, "a")
-Write_Data("dataset\mf_hi_train.dat", 10, func_hi, "w")
-Write_Data("dataset\mf_hi_test.dat", 1000, func_hi, "w")
+Write_Data("dataset\mf_lo_train.dat", 200, func_lo)
+Write_Data("dataset\mf_mi_train.dat", 200, func_mi)
+Write_Data("dataset\mf_hi_train.dat", 10, func_hi)
+Write_Data("dataset\mf_hi_test.dat", 1000, func_hi)
