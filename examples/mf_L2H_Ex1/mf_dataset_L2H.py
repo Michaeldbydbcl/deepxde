@@ -71,7 +71,7 @@ def main():
     initializer = "Glorot uniform"
     regularization = ["l2", 0.01]
     net = dde.maps.MfNN_L2H(
-        [1] + [100] * 4 + [1],
+        [1] + [10] * 4 + [1],
         [1] + [10] * 4 + [1],
         [4] * 2 + [1],
         activation,
@@ -81,7 +81,7 @@ def main():
 
     model = dde.Model(data, net)
     model.compile("adam", lr=0.001, metrics=["l2 relative error"])
-    losshistory, train_state = model.train(epochs=80000)
+    losshistory, train_state = model.train(epochs=20000)
 
     # mape.append(dde.utils.apply(mfnn, (data,))[0])      ##### Changed in New version
 

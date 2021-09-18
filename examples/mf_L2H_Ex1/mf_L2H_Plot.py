@@ -18,7 +18,7 @@ def Get_Data(FileName, Data_Column1, Data_Column2):
     return Data_Extract_float
 
 
-# Now plot extracted data
+# Extract data
 x_test = Get_Data("dataset\mf_hi_test.dat", 0, 1)
 y_test = Get_Data("dataset\mf_hi_test.dat", 1, 2)
 
@@ -33,14 +33,16 @@ y_hi_train = Get_Data("dataset\mf_hi_train.dat", 1, 2)
 
 y_predict = Get_Data("test.dat", 4, 7)     # x using high test data
 
-# for i in range(3):
-#     plt.plot(x_test, y_predict[:,i])
 
-plt.plot(x_test, y_predict[:,0], label='Low fidelity 1 predict')
-plt.plot(x_test, y_predict[:,1], label='Low fidelity 2 predict')
-plt.plot(x_test, y_predict[:,2], label='High fidelity predict')
+# Plot the train data with predicted data
+plt.plot(x_low_one_train, y_low_one_train, label='Low fidelity 1 train')
+plt.plot(x_test, y_predict[:,0], label='Low fidelity 1 predict', linestyle='dashed')
+
+plt.plot(x_low_two_train, y_low_two_train, label='Low fidelity 2 train')
+plt.plot(x_test, y_predict[:,1], label='Low fidelity 2 predict', linestyle='dashed')
 
 plt.scatter(x_hi_train, y_hi_train, label='High fidelity train')
+plt.plot(x_test, y_predict[:,2], label='High fidelity predict', linestyle='dashed')
 
 plt.xlabel("x")
 plt.ylabel("y")

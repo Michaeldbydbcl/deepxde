@@ -113,7 +113,7 @@ def mfnn_L2H(data):
     x_dim, y_dim = 3, 1
     activation = "selu"
     initializer = "LeCun normal"
-    regularization = ["l2", 0.01]
+    regularization = ["l2", 0.001]     # Change to smaller value as in function cases
     net = dde.maps.MfNN_L2H(
         [x_dim] + [128] * 2 + [y_dim],
         [x_dim] + [128] * 2 + [y_dim],

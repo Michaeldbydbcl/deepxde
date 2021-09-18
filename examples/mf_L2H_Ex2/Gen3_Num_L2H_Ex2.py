@@ -13,7 +13,7 @@ def Write_Data(File_Name, Data_Number, Function, Write_Type):
     f = open(File_Name, Write_Type)
     f.write("# x, y" + '\n')
     
-    for x in np.arange(0, Data_Number+1, 1):
+    for x in np.arange(0, Data_Number, 1):
         f.write("{:.8f}".format(x/Data_Number) + "  " + "{:.8f}".format(Function(x/Data_Number)))
         f.write('\n')
     f.close()
@@ -23,10 +23,10 @@ def Write_Data(File_Name, Data_Number, Function, Write_Type):
 # This function is a phase-shifted oscillation function
 
 def func_lo_one(x):
-    return x**2 #+ np.sin(8*np.pi*x + np.pi/10)          
+    return x**2 
                                           
 def func_lo_two(x):
-    return np.sin(8*np.pi*x + np.pi/10)          
+    return np.sin(8*np.pi*x + np.pi/10)
                                           
 def func_hi(x):                           
     return x**2 + np.sin(8*np.pi*x + np.pi/10)**2

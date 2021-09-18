@@ -30,7 +30,7 @@ def func_hi(x):
     return 3 * x * np.sin(2 * np.pi * x)  
 
 
-Write_Data("dataset\mf_lo_train.dat", 200, func_lo)
-Write_Data("dataset\mf_mi_train.dat", 200, func_mi)
-Write_Data("dataset\mf_hi_train.dat", 10, func_hi)
+Write_Data("dataset\mf_lo_train.dat", 100, func_lo)
+Write_Data("dataset\mf_mi_train.dat", 50, func_mi)
+Write_Data("dataset\mf_hi_train.dat", 5, func_hi)
 Write_Data("dataset\mf_hi_test.dat", 1000, func_hi)

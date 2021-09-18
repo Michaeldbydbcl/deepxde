@@ -102,7 +102,7 @@ class MfNN(NN):
             alpha2 = activations.get("tanh")(alpha2)
             # self.y_hi = self.y_lo + 0.1 * (alpha1 * y_hi_l + alpha2 * y_hi_nl)
             #  y_lo should take value -1?
-            self.y_hi = self.y_lo + (alpha1 * y_hi_l + alpha2 * y_hi_nl)
+            self.y_hi = self.y_lo + 0.1 * (alpha1 * y_hi_l + alpha2 * y_hi_nl)
 
         self.target_lo = tf.placeholder(config.real(tf), [None, self.layer_size_lo[-1]])
         self.target_hi = tf.placeholder(config.real(tf), [None, self.layer_size_hi[-1]])

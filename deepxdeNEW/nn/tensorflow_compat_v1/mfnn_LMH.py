@@ -156,14 +156,14 @@ class MfNN_LMH(NN):             ### Changed "Map" to "NN" for the new verison of
             self.y_hi = y_hi_l + alpha * y_hi_nl
         else:
             alpha4 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi)
-            alpha4 = activations.get("tanh")(alpha1)
+            alpha4 = activations.get("tanh")(alpha4)
             alpha5 = tf.Variable(0, dtype=config.real(tf), trainable=self.trainable_hi)
-            alpha5 = activations.get("tanh")(alpha2)
+            alpha5 = activations.get("tanh")(alpha5)
 
             alpha6 = tf.Variable(1, dtype=config.real(tf), trainable=True)
             alpha7 = tf.Variable(1, dtype=config.real(tf), trainable=True)
           
-            self.y_hi = alpha6 * self.y_mi + + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
+            self.y_hi = alpha6 * self.y_mi + alpha7 * sefl.y_lo + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
             # self.y_hi = alpha7 * self.y_lo + alpha6* self.y_mi + + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
 
 
