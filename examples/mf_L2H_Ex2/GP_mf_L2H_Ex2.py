@@ -21,12 +21,12 @@ sys.path.append('../')
 import Code as Code
 
 # Import data process function from Code folder, Data_Process.py
-from Code.Data_Process import Get_Data, Write_Data
+from Code.Data_Process import Get_Data
+from Code.Data_Process import Write_Data
 
 # Import the L2 error function from Code folder, Error_Func.
-from Code.Error_Func import L2_RE, RMSE
+from Code.Error_Func import L2_RE
 #--------------------------------------------------------------------------------
-
 
 class LinearMFGP(object):
     def __init__(self, noise=None, n_optimization_restarts=10):
@@ -83,14 +83,11 @@ def main():
     x_plot_h = Get_Data("dataset\mf_hi_train.dat", 0, 1)
     y_plot_h = Get_Data("dataset\mf_hi_train.dat", 1, 2)
 
-    x_plot_h_True = Get_Data("dataset\mf_hi_test.dat", 0, 1)
-    y_plot_h_True = Get_Data("dataset\mf_hi_test.dat", 1, 2)
-
     # x_train_h = np.atleast_2d(np.random.permutation(x_train_l)[:8])
     # y_train_l = low_fidelity(x_train_l)
     # y_train_h = high_fidelity(x_train_h)
-    x_train_l = Get_Data("dataset\mf_lo_two_train.dat", 0, 1)
-    y_train_l = Get_Data("dataset\mf_lo_two_train.dat", 1, 2)
+    x_train_l = Get_Data("dataset\mf_lo_one_train.dat", 0, 1)
+    y_train_l = Get_Data("dataset\mf_lo_one_train.dat", 1, 2)
     x_train_h = Get_Data("dataset\mf_hi_train.dat", 0, 1)
     y_train_h = Get_Data("dataset\mf_hi_train.dat", 1, 2)
 
@@ -98,8 +95,6 @@ def main():
     model.train(x_train_l, y_train_l, x_train_h, y_train_h)
     lf_mean, lf_std, hf_mean, hf_std = model.predict(x_plot_l)
     lf_mean_cal, lf_std_cal, hf_mean_cal, hf_std_cal = model.predict(x_plot_h)
-    lf_mean_cal, lf_std_cal, hf_mean_cal, hf_std_cal = model.predict(x_plot_h_True)
-
 
 #---------------------------------------------------------------------
 ##### Print out the predicted values and the ture values
@@ -112,8 +107,6 @@ def main():
     print("#-------------------------------------------------------")
 
     print("L2 relative error for high train is: ", L2_RE(hf_mean, y_train_h))
-    print("Root mean squared error for high train is: ", RMSE(hf_mean, y_train_h))
-
     print("L2 relative error for low train is:  ", L2_RE(lf_mean, y_train_l))
 
 #---------------------------------------------------------------------
@@ -148,7 +141,7 @@ def main():
     plt.plot(x_plot_l, y_plot_l, "b")
     plt.plot(x_plot_h, y_plot_h, "r")
     plt.plot(x_plot_l, lf_mean, "--", color="g")
-    plt.plot(x_plot_h_True, hf_mean_cal, "--", color="y")
+    plt.plot(x_plot_l, hf_mean, "--", color="y")
     plt.scatter(x_train_l, y_train_l, color="b", s=40)
     plt.scatter(x_train_h, y_train_h, color="r", s=40)
     plt.ylabel("f (x)")

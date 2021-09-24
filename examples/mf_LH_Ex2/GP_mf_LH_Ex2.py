@@ -27,7 +27,6 @@ from Code.Data_Process import Get_Data, Write_Data
 from Code.Error_Func import L2_RE, RMSE
 #--------------------------------------------------------------------------------
 
-
 class LinearMFGP(object):
     def __init__(self, noise=None, n_optimization_restarts=10):
         self.noise = noise
@@ -77,8 +76,8 @@ def main():
     # y_plot_h = high_fidelity(x_plot)    
     # x_plot_l = Get_Data("dataset\mf_lo_one_train.dat", 0, 1)
     # y_plot_l = Get_Data("dataset\mf_lo_one_train.dat", 1, 2)
-    x_plot_l = Get_Data("dataset\mf_lo_two_train.dat", 0, 1)
-    y_plot_l = Get_Data("dataset\mf_lo_two_train.dat", 1, 2)
+    x_plot_l = Get_Data("dataset\mf_lo_train.dat", 0, 1)
+    y_plot_l = Get_Data("dataset\mf_lo_train.dat", 1, 2)
   
     x_plot_h = Get_Data("dataset\mf_hi_train.dat", 0, 1)
     y_plot_h = Get_Data("dataset\mf_hi_train.dat", 1, 2)
@@ -89,17 +88,15 @@ def main():
     # x_train_h = np.atleast_2d(np.random.permutation(x_train_l)[:8])
     # y_train_l = low_fidelity(x_train_l)
     # y_train_h = high_fidelity(x_train_h)
-    x_train_l = Get_Data("dataset\mf_lo_two_train.dat", 0, 1)
-    y_train_l = Get_Data("dataset\mf_lo_two_train.dat", 1, 2)
+    x_train_l = Get_Data("dataset\mf_lo_train.dat", 0, 1)
+    y_train_l = Get_Data("dataset\mf_lo_train.dat", 1, 2)
     x_train_h = Get_Data("dataset\mf_hi_train.dat", 0, 1)
     y_train_h = Get_Data("dataset\mf_hi_train.dat", 1, 2)
 
     model = LinearMFGP(noise=0, n_optimization_restarts=10)
     model.train(x_train_l, y_train_l, x_train_h, y_train_h)
     lf_mean, lf_std, hf_mean, hf_std = model.predict(x_plot_l)
-    lf_mean_cal, lf_std_cal, hf_mean_cal, hf_std_cal = model.predict(x_plot_h)
     lf_mean_cal, lf_std_cal, hf_mean_cal, hf_std_cal = model.predict(x_plot_h_True)
-
 
 #---------------------------------------------------------------------
 ##### Print out the predicted values and the ture values
@@ -111,16 +108,15 @@ def main():
     print("The true high values are: ", y_train_h)
     print("#-------------------------------------------------------")
 
-    print("L2 relative error for high train is: ", L2_RE(hf_mean, y_train_h))
-    print("Root mean squared error for high train is: ", RMSE(hf_mean, y_train_h))
+    print("L2 relative error for high train is: ", L2_RE(hf_mean_cal, y_plot_h_True))
+    print("Root mean squared error for high train is: ", RMSE(hf_mean_cal, y_train_h))
 
     print("L2 relative error for low train is:  ", L2_RE(lf_mean, y_train_l))
-
 #---------------------------------------------------------------------
 
     plt.figure(figsize=(12, 8))
     plt.plot(x_plot_l, y_plot_l, "b")
-    plt.plot(x_plot_h, y_plot_h, "r")
+    plt.plot(x_plot_h_True, y_plot_h_True, "r")
     plt.scatter(x_train_l, y_train_l, color="b", s=40)
     plt.scatter(x_train_h, y_train_h, color="r", s=40)
     plt.ylabel("f (x)")
@@ -146,7 +142,7 @@ def main():
     )
 
     plt.plot(x_plot_l, y_plot_l, "b")
-    plt.plot(x_plot_h, y_plot_h, "r")
+    plt.plot(x_plot_h_True, y_plot_h_True, "r")
     plt.plot(x_plot_l, lf_mean, "--", color="g")
     plt.plot(x_plot_h_True, hf_mean_cal, "--", color="y")
     plt.scatter(x_train_l, y_train_l, color="b", s=40)
