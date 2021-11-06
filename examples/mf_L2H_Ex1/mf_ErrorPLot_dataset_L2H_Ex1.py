@@ -9,6 +9,21 @@ import sys
 sys.path.append('../../')
 
 import deepxdeNEW as dde
+#--------------------------------------------------------------------------------
+# Import necessary functions from "Code" folder to process the data
+import sys
+import math
+
+sys.path.append('../')
+import Code as Code
+
+# Import data process function from Code folder, Data_Process.py
+from Code.Data_Process import Get_Data, Write_Data
+
+# Import the L2 error function from Code folder, Error_Func.
+from Code.Error_Func import L2_RE, RMSE
+
+#--------------------------------------------------------------------------------
 
 
 def main():
@@ -81,12 +96,54 @@ def main():
 
     model = dde.Model(data, net)
     model.compile("adam", lr=0.0001, metrics=["l2 relative error"])
-    losshistory, train_state = model.train(epochs=50000)
+    losshistory, train_state = model.train(epochs=40000)
 
     # mape.append(dde.utils.apply(mfnn, (data,))[0])      ##### Changed in New version
-
     dde.saveplot(losshistory, train_state, issave=True, isplot=True)
+    
+    # Write data to the file
+    L2Error = Get_Data("loss.dat", -1, None)
+    f.write("{:.8f}".format(i+1) + "  " + "{:.8f}".format(L2Error[-1][0]))
+    # f.write(L2Error[-1])
+    f.write('\n')
+    print(L2Error)
+    print(L2Error[-1])
+
 
 
 if __name__ == "__main__":
-    main()
+    #--------------------------------------------------------------------------------
+    # Generate several datasets that have different sizes
+    
+    def func_lo_one(x):
+        return 3 * x
+                                            
+    def func_lo_two(x):
+        return np.sin(2 * np.pi * x)          
+                                            
+    def func_hi(x):                           
+        return 3 * x * np.sin(2 * np.pi * x)  
+    
+    Write_Data("dataset\mf_lo_one_train.dat", 100, func_lo_one, "w")
+    Write_Data("dataset\mf_lo_two_train.dat", 100, func_lo_two, "w")
+    Write_Data("dataset\mf_hi_train.dat", 15, func_hi, "w")
+    Write_Data("dataset\mf_hi_test.dat", 1000, func_hi, "w")
+    #--------------------------------------------------------------------------------
+
+    f = open("mf_L2Error_Ex1.dat", "w").close()     # Firstly, clear the content of the file
+    # main() in dde, postprocessing file -> line 46, don't plot the results
+    for i in range(4, 25, 1):
+        Write_Data("dataset\mf_hi_train.dat", i, func_hi, "w")
+        f = open("mf_L2Error_Ex1.dat", "a")
+        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        print("Data size is :", i+1)
+
+        main()
+    
+    x_Error = Get_Data("mf_L2Error_Ex1.dat", 0, 1)
+    y_Error = Get_Data("mf_L2Error_Ex1.dat", 1, 2)
+
+    plt.plot(x_Error, y_Error, "b")
+
+    plt.show()
+

@@ -113,11 +113,11 @@ def mfnn_LMH(data):
     x_dim, y_dim = 3, 1
     activation = "selu"
     initializer = "LeCun normal"
-    regularization = ["l2", 0.01]
+    regularization = ["l2", 0.00001]
     net = dde.maps.MfNN_LMH(
+        [x_dim] + [256] * 2 + [y_dim],
         [x_dim] + [128] * 2 + [y_dim],
-        [x_dim] + [128] * 2 + [y_dim],
-        [8] * 2 + [y_dim],
+        [64] * 2 + [y_dim],
         activation,
         initializer,
         regularization=regularization,

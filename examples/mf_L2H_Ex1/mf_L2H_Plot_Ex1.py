@@ -49,3 +49,24 @@ plt.ylabel("y")
 plt.legend()
 
 plt.show()
+
+# PLot the comparison between mf and GP
+DataSize = Get_Data("mf_L2Error_Ex1.dat", 0, 1)
+
+mf_Error = Get_Data("mf_L2Error_Ex1.dat", 1, 2)
+GP_Error_Low_One = Get_Data("GP_L2Error_Ex1_High_Change_Low_One_Fix.dat", 1, 2)
+GP_Error_Low_Two = Get_Data("GP_L2Error_Ex1_High_Change_Low_Two_Fix.dat", 1, 2)
+
+plt.plot(DataSize, mf_Error, label='L2H L2 error')
+plt.plot(DataSize, GP_Error_Low_One, label='GP L2 error, low fidelity one')
+plt.plot(DataSize, GP_Error_Low_Two, label='GP L2 error, low fidelity two')
+
+plt.legend()
+
+plt.xlabel("High fidelity dataset size")
+plt.ylabel("L2 relativeerror")
+
+plt.title("Comparison between L2H and GP, Ex1")
+plt.yscale('log')
+
+plt.show()

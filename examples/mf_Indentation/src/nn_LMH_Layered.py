@@ -109,34 +109,35 @@ def validation_FEM(yname, angles, train_size):
     print(yname, train_size, np.mean(mape), np.std(mape))
 
 
-def mfnn_L2H(data):
+def mfnn_LMH(data):
     x_dim, y_dim = 3, 1
-    # activation = "selu"
-    activation = "tanh"
-
+    activation = "selu"
     initializer = "LeCun normal"
-    regularization = ["l2", 0.0005]     # Change to smaller value as in function cases
-    net = dde.maps.MfNN_L2H(
+    regularization = ["l2", 0.0001]
+    net = dde.maps.MfNN_LMH(
         [x_dim] + [256] * 2 + [y_dim],
         [x_dim] + [128] * 2 + [y_dim],
-        [64] * 2 + [y_dim],
+        [32] * 2 + [y_dim],
         activation,
         initializer,
         regularization=regularization,
         residue=True,
-        trainable_low_one_fidelity=True,
-        trainable_low_two_fidelity=True,
+        trainable_low_fidelity=True,
+        trainable_mid_fidelity=True,
         trainable_high_fidelity=True,
     )
-    # 256, 128, 16, reg=0.00001, lr=0.00001, "tanh", goes to around 40%.
-    # 256, 128, 64, reg=0.00005, lr=0.00001, "tanh", goes to around 10%, with best data 8%.
-    # 256, 256, 64, reg=0.00005, lr=0.00001, "tanh", goes to around 15%, with best data 11%.
-    # 256, 128, 128, reg=0.00005, lr=0.00001, "tanh", goes to around 20%, with best data 15%.
-    # 256, 128, 64, reg=0.00005, lr=0.00001, "tanh", goes down to 10%, then goes back to 20%
 
     model = dde.Model(data, net)
-    model.compile("adam", lr=0.00001, loss="MAPE", metrics=["MAPE", "APE SD"])
-    losshistory, train_state = model.train(epochs=80000)
+
+    model.compile("adam", lr=0.0005, loss_weights=(1, 0, 0, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
+    losshistory, train_state = model.train(epochs=10000)
+
+    model.compile("adam", lr=0.0005, loss_weights=(0, 1, 0, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
+    losshistory, train_state = model.train(epochs=10000)
+
+    model.compile("adam", lr=0.0005, loss_weights=(0, 0, 1, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
+    losshistory, train_state = model.train(epochs=10000)
+
     # checker = dde.callbacks.ModelCheckpoint(
     #     "model/model.ckpt", verbose=1, save_better_only=True, period=1000
     # )
@@ -152,11 +153,10 @@ def mfnn_L2H(data):
 
 
 def validation_mf(yname, train_size, Run_Number):
-    datalow_one = FEMData(yname, [70])
-    datalow_two = BerkovichData(yname)
+    datalow = FEMData(yname, [70])
+    datamid = BerkovichData(yname)
 
     # datalow = ModelData(yname, 10000, "forward_n")
-    # datahigh = BerkovichData(yname)
     # datahigh = FEMData(yname, [70])
     datahigh = ExpData("../data/B3067.csv", yname)
 
@@ -171,21 +171,21 @@ def validation_mf(yname, train_size, Run_Number):
         iter += 1
         print("\nCross-validation iteration: {}".format(iter), flush=True)
 
-        data = dde.data.MfData_L2H(
-            X_lo_one_train=datalow_one.X,     ##### Add one more low fidelity dataset
-            X_lo_two_train=datalow_two.X,     ##### Add one more low fidelity dataset
+        data = dde.data.MfData_LMH(
+            X_lo_train=datalow.X,     ##### Add one more low fidelity dataset
+            X_mi_train=datamid.X,     ##### Add one more low fidelity dataset
             X_hi_train=datahigh.X[train_index],
-            y_lo_one_train=datalow_one.y,     ##### Add one more low fidelity dataset
-            y_lo_two_train=datalow_two.y,     ##### Add one more low fidelity dataset
+            y_lo_train=datalow.y,     ##### Add one more low fidelity dataset
+            y_mi_train=datamid.y,     ##### Add one more low fidelity dataset
             y_hi_train=datahigh.y[train_index],
             X_hi_test=datahigh.X[test_index],
             y_hi_test=datahigh.y[test_index],
         )
         # mape.append(dde.apply(mfnn, (data,))[0])
-        mape.append(dde.utils.apply(mfnn_L2H, (data,))[0])      ##### "apply" function changed in New version
+        mape.append(dde.utils.apply(mfnn_LMH, (data,))[0])      ##### "apply" function changed in New version
 
         # mape.append(dde.apply(mfgp, (data,)))
-
+        
     ### Open a file to store MAPE values
     with open(yname+"_"+Run_Number+".txt", "a") as myfile:
         L = [yname, ",", str(train_size), ",", str(np.mean(mape)), ",", str(np.std(mape)), "\n"]
@@ -395,12 +395,12 @@ def main():
     # return
 
     # file = open("C:\\Users\\wshi\\Documents\\GitHub\\deep-learning-for-indentation\\src\\MAPE.txt", "w")
-    for train_size in range(1, 12):
+    for i in range(1, 12):
         # validation_model("E*", train_size)
         # validation_FEM("sigma_y", [50, 60, 70, 80], train_size)
 
         # file.write(validation_mf("E*", train_size))
-        validation_mf("sigma_y", train_size, "L2H_run1")
+        validation_mf("sigma_y", 10, "LMH_run1")
         # validation_exp_cross2("E*", train_size)
 
         print("=======================================================")

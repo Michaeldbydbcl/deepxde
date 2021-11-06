@@ -56,6 +56,6 @@ def func_hi(x):
 
 
 Write_Data("dataset\mf_lo_one_train.dat", 100, func_lo_one, "w")
-Write_Data("dataset\mf_lo_two_train.dat", 10, func_lo_two, "w")
-Write_Data("dataset\mf_hi_train.dat", 6, func_hi, "w")
+Write_Data("dataset\mf_lo_two_train.dat", 100, func_lo_two, "w")
+Write_Data("dataset\mf_hi_train.dat", 10, func_hi, "w")
 Write_Data("dataset\mf_hi_test.dat", 1000, func_hi, "w")

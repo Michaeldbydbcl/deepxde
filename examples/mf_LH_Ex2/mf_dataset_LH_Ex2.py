@@ -19,15 +19,15 @@ def main():
     initializer = "Glorot uniform"
     regularization = ["l2", 0.001]
     net = dde.maps.MfNN(
-        [1] + [50] * 4 + [1],
-        [4] * 2 + [1],
+        [1] + [1024] * 4 + [1],
+        [200] * 2 + [1],
         activation,
         initializer,
-        regularization=regularization,
+        # regularization=regularization,
     )
 
     model = dde.Model(data, net)
-    model.compile("adam", lr=0.001, metrics=["l2 relative error"])
+    model.compile("adam", lr=0.0001, metrics=["l2 relative error"])
     losshistory, train_state = model.train(epochs=20000)
 
     dde.saveplot(losshistory, train_state, issave=True, isplot=True)

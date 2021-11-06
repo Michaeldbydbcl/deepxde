@@ -64,7 +64,7 @@ def main():
     activation = "tanh"
     initializer = "Glorot uniform"
     regularization = ["l2", 0.01]
-    net = dde.maps.MfNN_LH2(
+    net = dde.maps.MfNN_LMH(
         [1] + [10] * 4 + [1],
         [1] + [10] * 4 + [1],
         [10] * 2 + [1],

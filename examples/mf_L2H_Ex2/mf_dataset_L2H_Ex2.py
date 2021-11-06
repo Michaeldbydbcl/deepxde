@@ -69,19 +69,27 @@ def main():
     activation = "tanh"
 
     initializer = "Glorot uniform"
-    regularization = ["l2", 0.001]   # change to small value?
+    regularization = ["l2", 0.00005]   # change to small value?
     net = dde.maps.MfNN_L2H(
-        [1] + [20] * 4 + [1],
-        [1] + [20] * 4 + [1],
-        [10] * 2 + [1],
+        [1] + [900] * 4 + [1],
+        [1] + [700] * 4 + [1],
+        [60] * 2 + [1],
         activation,
         initializer,
         regularization=regularization,
     )
+    # Note, 800, 800, 50 works fine, error to 8%.
+    # Note, 800, 800, 55 down to 8%, but bounces back
+    # Note, 900, 800, 50 goes to 3.60%.
+    # Note, 900, 700, 50 goes to 2.12%. (Reg = 0.0001)
+    # Note, 900, 700, 60, reg = 0.00005, lr=0.0001 can go down to 1.45%,, high train 20 points, more epoches does not help
+    # Note, 900, 700, 60, reg = 0.00007, lr=0.0001 can go down to 7.00%, more epoches does not help
+    # Note, 900, 700, 60, reg = 0.00004, lr=0.0001 to 10.00%, , high trian points around 10, more epoches does not help
+
 
     model = dde.Model(data, net)
-    model.compile("adam", lr=0.001, metrics=["l2 relative error"])
-    losshistory, train_state = model.train(epochs=20000)
+    model.compile("adam", lr=0.0001, metrics=["l2 relative error"])
+    losshistory, train_state = model.train(epochs=500000)
 
     # mape.append(dde.utils.apply(mfnn, (data,))[0])      ##### Changed in New version
 

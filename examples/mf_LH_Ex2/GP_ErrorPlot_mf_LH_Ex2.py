@@ -25,6 +25,7 @@ from Code.Data_Process import Get_Data, Write_Data
 
 # Import the L2 error function from Code folder, Error_Func.
 from Code.Error_Func import L2_RE, RMSE
+
 #--------------------------------------------------------------------------------
 
 
@@ -100,6 +101,7 @@ def main():
     lf_mean_cal, lf_std_cal, hf_mean_cal, hf_std_cal = model.predict(x_plot_h)
     lf_mean_cal, lf_std_cal, hf_mean_cal, hf_std_cal = model.predict(x_plot_h_True)
 
+
 #---------------------------------------------------------------------
 ##### Print out the predicted values and the ture values
 
@@ -110,60 +112,105 @@ def main():
     print("The true high values are: ", y_train_h)
     print("#-------------------------------------------------------")
 
-    print("L2 relative error for high train is: ", L2_RE(hf_mean_cal, y_plot_h_True))
-    print("Root mean squared error for high train is: ", RMSE(hf_mean_cal, y_train_h))
+    print("L2 relative error for high train is: ", L2_RE(hf_mean, y_train_h))
+    print("L2 relative error for high test is:  ", L2_RE(hf_mean_cal, y_plot_h_True))
+
+    # L2Error = L2_RE(hf_mean, y_train_h)
+    L2Error = L2_RE(hf_mean_cal, y_plot_h_True)
+
+
+    f.write("{:.8f}".format(i+1) + "  " + "{:.8f}".format(L2Error))
+    f.write('\n')
+
+    print("Root mean squared error for high train is: ", RMSE(hf_mean, y_train_h))
 
     print("L2 relative error for low train is:  ", L2_RE(lf_mean, y_train_l))
+
 #---------------------------------------------------------------------
 
-    plt.figure(figsize=(12, 8))
-    plt.plot(x_plot_l, y_plot_l, "b")
-    plt.plot(x_plot_h_True, y_plot_h_True, "r")
-    plt.scatter(x_train_l, y_train_l, color="b", s=40)
-    plt.scatter(x_train_h, y_train_h, color="r", s=40)
-    plt.ylabel("f (x)")
-    plt.xlabel("x")
-    plt.legend(["Low fidelity", "High fidelity"])
-    plt.title("High and low fidelity Forrester functions")
-
-    ## Plot the posterior mean and variance
-    plt.figure(figsize=(12, 8))
-    plt.fill_between(
-        x_plot_l.flatten(),
-        (lf_mean - 1.96 * lf_std).flatten(),
-        (lf_mean + 1.96 * lf_std).flatten(),
-        facecolor="g",
-        alpha=0.3,
-    )
-    plt.fill_between(
-        x_plot_l.flatten(),
-        (hf_mean - 1.96 * hf_std).flatten(),
-        (hf_mean + 1.96 * hf_std).flatten(),
-        facecolor="y",
-        alpha=0.3,
-    )
-
-    plt.plot(x_plot_l, y_plot_l, "b")
-    plt.plot(x_plot_h, y_plot_h, "r")
-    plt.plot(x_plot_l, lf_mean, "--", color="g")
-    plt.plot(x_plot_l, hf_mean, "--", color="y")
-    plt.scatter(x_train_l, y_train_l, color="b", s=40)
-    plt.scatter(x_train_h, y_train_h, color="r", s=40)
-    plt.ylabel("f (x)")
-    plt.xlabel("x")
-    plt.legend(
-        [
-            "Low Fidelity",
-            "High Fidelity",
-            "Predicted Low Fidelity",
-            "Predicted High Fidelity",
-        ]
-    )
-    plt.title(
-        "Linear multi-fidelity model fit to low and high fidelity function"
-    )
-    plt.show()
+    # plt.figure(figsize=(12, 8))
+    # plt.plot(x_plot_l, y_plot_l, "b")
+    # plt.plot(x_plot_h, y_plot_h, "r")
+    # plt.scatter(x_train_l, y_train_l, color="b", s=40)
+    # plt.scatter(x_train_h, y_train_h, color="r", s=40)
+    # plt.ylabel("f (x)")
+    # plt.xlabel("x")
+    # plt.legend(["Low fidelity", "High fidelity"])
+    # plt.title("High and low fidelity Forrester functions")
+# 
+    # Plot the posterior mean and variance
+    # plt.figure(figsize=(12, 8))
+    # plt.fill_between(
+        # x_plot_l.flatten(),
+        # (lf_mean - 1.96 * lf_std).flatten(),
+        # (lf_mean + 1.96 * lf_std).flatten(),
+        # facecolor="g",
+        # alpha=0.3,
+    # )
+    # plt.fill_between(
+        # x_plot_l.flatten(),
+        # (hf_mean - 1.96 * hf_std).flatten(),
+        # (hf_mean + 1.96 * hf_std).flatten(),
+        # facecolor="y",
+        # alpha=0.3,
+    # )
+# 
+    # plt.plot(x_plot_l, y_plot_l, "b")
+    # plt.plot(x_plot_h, y_plot_h, "r")
+    # plt.plot(x_plot_l, lf_mean, "--", color="g")
+    # plt.plot(x_plot_h_True, hf_mean_cal, "--", color="y")
+    # plt.scatter(x_train_l, y_train_l, color="b", s=40)
+    # plt.scatter(x_train_h, y_train_h, color="r", s=40)
+    # plt.ylabel("f (x)")
+    # plt.xlabel("x")
+    # plt.legend(
+        # [
+            # "Low Fidelity",
+            # "High Fidelity",
+            # "Predicted Low Fidelity",
+            # "Predicted High Fidelity",
+        # ]
+    # )
+    # plt.title(
+        # "Linear multi-fidelity model fit to low and high fidelity function"
+    # )
+    # plt.show()
 
 
 if __name__ == "__main__":
-    main()
+    #--------------------------------------------------------------------------------
+    # Generate several datasets that have different sizes
+    
+    def func_lo_one(x):
+    # return x**2 
+        return np.sin(8*np.pi*x + np.pi/10)          
+                                         
+    def func_lo_two(x):
+        # return np.sin(8*np.pi*x + np.pi/10)          
+        return np.sin(8*np.pi*x + np.pi/10)**2
+                                            
+    def func_hi(x):                           
+        return x**2 + np.sin(8*np.pi*x + np.pi/10)**2
+
+    Write_Data("dataset\mf_lo_train.dat", 200, func_lo_one, "w")
+    # Write_Data("dataset\mf_lo_train.dat", 200, func_lo_two, "w")
+    Write_Data("dataset\mf_hi_train.dat", 15, func_hi, "w")
+    Write_Data("dataset\mf_hi_test.dat", 1000, func_hi, "w")
+    #--------------------------------------------------------------------------------
+
+    f = open("GP_L2Error_Ex1.dat", "w").close()     # Firstly, clear the content of the file
+    # main()
+    for i in range(5, 50, 10):
+        Write_Data("dataset\mf_hi_train.dat", i, func_hi, "w")
+        f = open("GP_L2Error_Ex1.dat", "a")
+
+        main()
+    
+    x_Error = Get_Data("GP_L2Error_Ex1.dat", 0, 1)
+    y_Error = Get_Data("GP_L2Error_Ex1.dat", 1, 2)
+
+    plt.plot(x_Error, y_Error, "b")
+
+    plt.show()
+
+

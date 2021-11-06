@@ -163,7 +163,7 @@ class MfNN_LMH(NN):             ### Changed "Map" to "NN" for the new verison of
             alpha6 = tf.Variable(1, dtype=config.real(tf), trainable=True)
             alpha7 = tf.Variable(1, dtype=config.real(tf), trainable=True)
           
-            self.y_hi = alpha6 * self.y_mi + alpha7 * sefl.y_lo + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
+            self.y_hi = alpha6 * self.y_mi + alpha7 * self.y_lo + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
             # self.y_hi = alpha7 * self.y_lo + alpha6* self.y_mi + + 0.1 * (alpha4 * y_hi_l + alpha5 * y_hi_nl)     #### add low or mid or both?
 
 
