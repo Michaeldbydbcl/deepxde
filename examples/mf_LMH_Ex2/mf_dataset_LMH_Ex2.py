@@ -63,11 +63,11 @@ def main():
 
     activation = "tanh"
     initializer = "Glorot uniform"
-    regularization = ["l2", 0.00001]
+    regularization = ["l2", 0.0001]
     net = dde.maps.MfNN_LMH(
-        [1] + [100] * 4 + [1],
-        [1] + [80] * 4 + [1],
-        [50] * 2 + [1],
+        [1] + [400] * 4 + [1],
+        [1] + [200] * 4 + [1],
+        [100] * 2 + [1],
         activation,
         initializer,
         regularization=regularization,
@@ -83,16 +83,17 @@ def main():
     model = dde.Model(data, net)
     # model.compile("adam", lr=0.0001, loss="MAPE", metrics=["MAPE", "APE SD"])
 
-    # model.compile("adam", lr=0.0001, loss_weights=(1, 0, 0, 1), metrics=["l2 relative error"])
+    model.compile("adam", lr=0.0001, loss_weights=(1, 1, 1, 1), metrics=["l2 relative error"])
+    losshistory, train_state = model.train(epochs=120000)
 
-    model.compile("adam", lr=0.0001, loss_weights=(1, 0, 0, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
-    losshistory, train_state = model.train(epochs=60000)
-
-    model.compile("adam", lr=0.0001, loss_weights=(0, 1, 0, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
-    losshistory, train_state = model.train(epochs=60000)
-
-    model.compile("adam", lr=0.0001, loss_weights=(0, 0, 1, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
-    losshistory, train_state = model.train(epochs=10000)
+    # model.compile("adam", lr=0.0001, loss_weights=(1, 0, 0, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
+    # losshistory, train_state = model.train(epochs=60000)
+# 
+    # model.compile("adam", lr=0.0001, loss_weights=(0, 1, 0, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
+    # losshistory, train_state = model.train(epochs=60000)
+# 
+    # model.compile("adam", lr=0.0001, loss_weights=(0, 0, 1, 1), loss="MAPE", metrics=["MAPE", "APE SD"])
+    # losshistory, train_state = model.train(epochs=10000)
 
     dde.saveplot(losshistory, train_state, issave=True, isplot=True)
 

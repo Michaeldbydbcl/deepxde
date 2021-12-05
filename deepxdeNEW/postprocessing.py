@@ -43,7 +43,7 @@ def saveplot(
     if isplot:
         plot_loss_history(loss_history)
         plot_best_state(train_state)
-        plt.show()
+        # plt.show()
 
 
 def plot_loss_history(loss_history, fname=None):

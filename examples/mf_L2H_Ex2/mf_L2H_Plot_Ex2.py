@@ -68,6 +68,7 @@ plt.xlabel("High fidelity dataset size")
 plt.ylabel("L2 relativeerror")
 
 plt.title("Comparison between L2H and GP, Ex1")
+plt.xlim(5,15)
 plt.yscale('log')
 
 plt.show()
